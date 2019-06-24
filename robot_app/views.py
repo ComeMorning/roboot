@@ -23,9 +23,15 @@ def upload(request):
         f.write(file.read())
 
     text = audio2text(file_name)
+    print('识别结果', text)
     index = get_high_sim(text)
     if index is not None:
         answer = read_answer(index)
+        if index == 3:
+            os.popen('notepad')
+        elif index == 4:
+            pass
+
     else:
         answer = get_roboot_answer(text)
 
