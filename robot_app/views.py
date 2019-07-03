@@ -24,16 +24,19 @@ def upload(request):
 
     text = audio2text(file_name)
     print('识别结果', text)
-    index = get_high_sim(text)
-    if index is not None:
-        answer = read_answer(index)
-        if index == 3:
-            os.popen('notepad')
-        elif index == 4:
-            pass
-
+    if text is not None:
+        # 文本相似度比较
+        index = get_high_sim(text)
+        if index is not None:
+            answer = read_answer(index)
+            if index == 3:
+                os.popen('notepad')
+            elif index == 4:
+                pass
+        else:
+            answer = get_roboot_answer(text)
     else:
-        answer = get_roboot_answer(text)
+        answer = '识别失败'
 
     hecheng_name = os.path.join('robot_app', 'static', 'audio_file', 'hecheng' + request.POST['name'])
 
@@ -42,6 +45,7 @@ def upload(request):
         res_name = hecheng_name.strip('robot_app//')
     else:
         print('合成失败！')
+        # 合成失败时可以自定义返回失败提示音，此处不做处理
         res_name = ''
 
     res_str = {
